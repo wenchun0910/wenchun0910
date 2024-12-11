@@ -1,0 +1,403 @@
+<html><head><base href="https://factor-practice.example.com/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>因數射擊練習 - 新戰鬥機版</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  #game-container {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  #fighter {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: left 0.1s ease;
+  }
+  .number {
+    position: absolute;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    user-select: none;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #F0F0F0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  #target-number {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 36px;
+    font-weight: bold;
+    color: #FF6347;
+  }
+  #score {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  #lives {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #FF0000;
+  }
+  #start-button {
+    font-size: 24px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  .bullet {
+    width: 4px;
+    height: 16px;
+    background-color: #FF0000;
+    position: absolute;
+  }
+  #instructions {
+    margin-top: 20px;
+	font-weight: bold;
+	padding:20px;
+	background:yellow;
+    font-size: 18px;
+    text-align: left;
+  }
+  #game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    font-weight: bold;
+    color: #FF0000;
+    display: none;
+  }
+  #factors-found {
+    position: absolute;
+    top: 90px;
+    left: 20px;
+    font-size: 18px;
+    text-align: left;
+  }
+  #sound-control {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <div id="game-container">
+    <div id="target-number"></div>
+    <div id="score">分數: 0</div>
+    <div id="lives">生命值: 3</div>
+    <div id="factors-found"></div>
+    <svg id="fighter" viewBox="0 0 100 100">
+      <path d="M50,10 L20,70 L50,60 L80,70 Z" fill="#4A90E2"/>
+      <path d="M20,70 L10,90 L50,75 L90,90 L80,70 Z" fill="#2C3E50"/>
+      <circle cx="50" cy="40" r="10" fill="#F5A623"/>
+      <rect x="45" y="60" width="10" height="15" fill="#4A90E2"/>
+      <path d="M30,60 L15,80 L30,75 Z" fill="#34495E"/>
+      <path d="M70,60 L85,80 L70,75 Z" fill="#34495E"/>
+    </svg>
+    <div id="game-over">遊戲結束</div>
+    <div id="sound-control">🔊</div>
+  </div>
+  <button id="start-button">開始遊戲</button>
+  <div id="instructions"><font color="red">
+    1.使用左右方向鍵移動戰鬥機<br>
+    2.按空白鍵發射子彈<br>
+    3.擊中因數以獲得分數，避免擊中非因數<br>
+    4.碰到非因數將失去生命值<br><br></font>
+	<center>設計者：VincentWang</center>
+  </div>
+
+<script>
+const gameContainer = document.getElementById('game-container');
+const fighter = document.getElementById('fighter');
+const targetNumberElement = document.getElementById('target-number');
+const scoreElement = document.getElementById('score');
+const livesElement = document.getElementById('lives');
+const startButton = document.getElementById('start-button');
+const gameOverElement = document.getElementById('game-over');
+const factorsFoundElement = document.getElementById('factors-found');
+const soundControl = document.getElementById('sound-control');
+
+let targetNumber = 0;
+let score = 0;
+let lives = 3;
+let gameRunning = false;
+let fighterPosition = 50;
+let currentFactors = [];
+let foundFactors = [];
+let fallingNumbers = [];
+let soundOn = true;
+
+// 音效
+const bgMusic = new Audio('https://kingvincentwang.github.io/readtest.github.io/game.mp3');
+bgMusic.loop = true;
+
+const shootSound = new Audio('https://taira-komori.jpn.org/sound_os2/game01/powerup06.mp3');
+const correctSound = new Audio('https://kingvincentwang.github.io/readtest.github.io/select01.mp3');
+const wrongSound = new Audio('https://kingvincentwang.github.io/readtest.github.io/blip01.mp3');
+
+function toggleSound() {
+  soundOn = !soundOn;
+  soundControl.textContent = soundOn ? '🔊' : '🔇';
+  if (soundOn) {
+    bgMusic.play();
+  } else {
+    bgMusic.pause();
+  }
+}
+
+soundControl.addEventListener('click', toggleSound);
+
+function playSound(sound) {
+  if (soundOn) {
+    sound.currentTime = 0;
+    sound.play();
+  }
+}
+
+function startGame() {
+  gameRunning = true;
+  score = 0;
+  lives = 3;
+  foundFactors = [];
+  updateScore();
+  updateLives();
+  updateFactorsFound();
+  startButton.style.display = 'none';
+  gameOverElement.style.display = 'none';
+  generateNewTargetNumber();
+  spawnNumbers();
+  gameLoop();
+  if (soundOn) {
+    bgMusic.play();
+  }
+}
+
+function generateNewTargetNumber() {
+  targetNumber = Math.floor(Math.random() * 91) + 10; // 10到100之間的隨機數
+  targetNumberElement.textContent = `目標數字: ${targetNumber}`;
+  currentFactors = getFactors(targetNumber);
+  foundFactors = [];
+  updateFactorsFound();
+}
+
+function getFactors(num) {
+  const factors = [];
+  for (let i = 1; i <= num; i++) {
+    if (num % i === 0) {
+      factors.push(i);
+    }
+  }
+  return factors;
+}
+
+function updateFactorsFound() {
+  factorsFoundElement.innerHTML = `已找到的因數: ${foundFactors.join(', ')}`;
+}
+
+function spawnNumbers() {
+  if (!gameRunning) return;
+
+  let number;
+  const isFactor = Math.random() < 0.6; // 60% 的機會生成因數
+
+  if (isFactor) {
+    const remainingFactors = currentFactors.filter(f => !foundFactors.includes(f));
+    if (remainingFactors.length > 0) {
+      number = remainingFactors[Math.floor(Math.random() * remainingFactors.length)];
+    } else {
+      number = Math.floor(Math.random() * (targetNumber - 1)) + 1;
+    }
+  } else {
+    do {
+      number = Math.floor(Math.random() * (targetNumber - 1)) + 1;
+    } while (currentFactors.includes(number));
+  }
+
+  const numberElement = document.createElement('div');
+  numberElement.className = 'number';
+  numberElement.textContent = number;
+  numberElement.style.left = `${Math.random() * (gameContainer.clientWidth - 40)}px`;
+  numberElement.style.top = '-40px';
+  gameContainer.appendChild(numberElement);
+
+  fallingNumbers.push({
+    element: numberElement,
+    speed: Math.random() * 2 + 1,
+    isFactor: isFactor,
+    value: number
+  });
+
+  setTimeout(spawnNumbers, Math.random() * 1000 + 500);
+}
+
+function updateScore() {
+  scoreElement.textContent = `分數: ${score}`;
+}
+
+function updateLives() {
+  livesElement.textContent = `生命值: ${lives}`;
+}
+
+function checkCollision(rect1, rect2) {
+  return !(rect1.right < rect2.left || 
+           rect1.left > rect2.right || 
+           rect1.bottom < rect2.top || 
+           rect1.top > rect2.bottom);
+}
+
+function shoot() {
+  if (!gameRunning) return;
+  
+  playSound(shootSound);
+
+  const bullet = document.createElement('div');
+  bullet.className = 'bullet';
+  bullet.style.left = `${fighterPosition}%`;
+  bullet.style.bottom = '80px';
+  gameContainer.appendChild(bullet);
+
+  function moveBullet() {
+    const currentBottom = parseFloat(bullet.style.bottom);
+    if (currentBottom > gameContainer.clientHeight) {
+      gameContainer.removeChild(bullet);
+    } else {
+      bullet.style.bottom = `${currentBottom + 5}px`;
+      
+      fallingNumbers.forEach((fallingNumber, index) => {
+        if (checkCollision(bullet.getBoundingClientRect(), fallingNumber.element.getBoundingClientRect())) {
+          if (fallingNumber.isFactor) {
+            playSound(correctSound);
+            score += fallingNumber.value;
+            updateScore();
+            if (!foundFactors.includes(fallingNumber.value)) {
+              foundFactors.push(fallingNumber.value);
+              updateFactorsFound();
+              if (foundFactors.length === currentFactors.length) {
+                generateNewTargetNumber();
+              }
+            }
+          } else {
+            playSound(wrongSound);
+            lives--;
+            updateLives();
+            if (lives <= 0) {
+              endGame();
+            }
+          }
+          gameContainer.removeChild(fallingNumber.element);
+          fallingNumbers.splice(index, 1);
+          gameContainer.removeChild(bullet);
+        }
+      });
+      
+      if (bullet.parentNode === gameContainer) {
+        requestAnimationFrame(moveBullet);
+      }
+    }
+  }
+
+  moveBullet();
+}
+
+function moveFighter(direction) {
+  if (direction === 'left' && fighterPosition > 0) {
+    fighterPosition = Math.max(0, fighterPosition - 2);
+  } else if (direction === 'right' && fighterPosition < 100) {
+    fighterPosition = Math.min(100, fighterPosition + 2);
+  }
+  fighter.style.left = `${fighterPosition}%`;
+}
+
+function gameLoop() {
+  if (!gameRunning) return;
+
+  const fighterRect = fighter.getBoundingClientRect();
+
+  fallingNumbers.forEach((fallingNumber, index) => {
+    const currentTop = parseFloat(fallingNumber.element.style.top);
+    if (currentTop > gameContainer.clientHeight) {
+      gameContainer.removeChild(fallingNumber.element);
+      fallingNumbers.splice(index, 1);
+    } else {
+      fallingNumber.element.style.top = `${currentTop + fallingNumber.speed}px`;
+      
+      if (checkCollision(fighterRect, fallingNumber.element.getBoundingClientRect())) {
+        if (!fallingNumber.isFactor) {
+          playSound(wrongSound);
+          lives--;
+          updateLives();
+          if (lives <= 0) {
+            endGame();
+          }
+        }
+        gameContainer.removeChild(fallingNumber.element);
+        fallingNumbers.splice(index, 1);
+      }
+    }
+  });
+
+  requestAnimationFrame(gameLoop);
+}
+
+function endGame() {
+  gameRunning = false;
+  gameOverElement.style.display = 'block';
+  startButton.style.display = 'block';
+  fallingNumbers.forEach(fallingNumber => {
+    gameContainer.removeChild(fallingNumber.element);
+  });
+  fallingNumbers = [];
+  bgMusic.pause();
+  bgMusic.currentTime = 0;
+}
+
+document.addEventListener('keydown', (event) => {
+  if (event.code === 'ArrowLeft') {
+    moveFighter('left');
+  } else if (event.code === 'ArrowRight') {
+    moveFighter('right');
+  } else if (event.code === 'Space') {
+    shoot();
+  }
+});
+
+startButton.addEventListener('click', startGame);
+</script>
+</body></html>
