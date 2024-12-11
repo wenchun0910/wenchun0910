@@ -1,0 +1,147 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: https://filedn.com/laMtL9jmKf7JrDEQG0A6OPy/html/%E4%BA%8B%E4%BB%B6%E5%80%92%E6%95%B8%E5%B7%A5%E5%85%B7new.html
+Subject: =?utf-8?Q?=E5=A4=9A=E4=BA=8B=E4=BB=B6=E5=80=92=E6=95=B8=E8=A8=88=E6=99=82?=
+Date: Wed, 11 Dec 2024 22:07:45 +0800
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--YIH4MVK9yCcq0k0iWqc6X9WQZkjbtEqlnKkNcbWW0r----"
+
+
+------MultipartBoundary--YIH4MVK9yCcq0k0iWqc6X9WQZkjbtEqlnKkNcbWW0r----
+Content-Type: text/html
+Content-ID: <frame-AD2E72DEB2D87266D81A06FF6EAC3CBC@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://filedn.com/laMtL9jmKf7JrDEQG0A6OPy/html/%E4%BA%8B%E4%BB%B6%E5%80%92%E6%95%B8%E5%B7%A5%E5%85%B7new.html
+
+<!DOCTYPE html><html lang=3D"zh-Hant"><head><meta http-equiv=3D"Content-Typ=
+e" content=3D"text/html; charset=3DUTF-8"><link rel=3D"stylesheet" type=3D"=
+text/css" href=3D"cid:css-34e4fc24-b734-497d-b2e4-50a27508c1c3@mhtml.blink"=
+ />
+ =20
+  <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D=
+1.0">
+  <title>=E5=A4=9A=E4=BA=8B=E4=BB=B6=E5=80=92=E6=95=B8=E8=A8=88=E6=99=82</t=
+itle>
+ =20
+</head>
+<body>
+  <h1 id=3D"mainTitle">=E4=BA=8B=E4=BB=B6=E5=80=92=E6=95=B8=E6=97=A5=E5=B7=
+=A5=E5=85=B7</h1>
+ =20
+  <div id=3D"inputForm">
+    <input type=3D"text" id=3D"eventName" placeholder=3D"=E4=BA=8B=E4=BB=B6=
+=E5=90=8D=E7=A8=B1">
+    <input type=3D"date" id=3D"eventDate">
+    <button>=E6=96=B0=E5=A2=9E=E4=BA=8B=E4=BB=B6</button>
+  </div>
+
+  <div id=3D"eventList"></div>
+
+  <div id=3D"countdownSection">
+    <h1 id=3D"eventTitle"></h1>
+    <div id=3D"countdown"></div>
+  </div>
+
+  <div id=3D"buttonContainer">
+    <button id=3D"resetButton">=E9=87=8D=E7=BD=AE</button>
+    <button id=3D"exportButton">=E5=8C=AF=E5=87=BA</button>
+    <button id=3D"importButton">=E5=8C=AF=E5=85=A5</button>
+  </div>
+
+  <button id=3D"backButton">Back</button>
+
+  <div id=3D"footer">
+    Made by <a href=3D"https://kentxchang.blogspot.tw/" target=3D"_blank">=
+=E9=98=BF=E5=89=9B=E8=80=81=E5=B8=AB</a>
+  </div>
+
+ =20
+
+
+</body></html>
+------MultipartBoundary--YIH4MVK9yCcq0k0iWqc6X9WQZkjbtEqlnKkNcbWW0r----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-34e4fc24-b734-497d-b2e4-50a27508c1c3@mhtml.blink
+
+@charset "utf-8";
+
+* { margin: 0px; padding: 0px; box-sizing: border-box; }
+
+body { height: 100vh; display: flex; flex-direction: column; justify-conten=
+t: center; align-items: center; background: linear-gradient(to right, rgb(7=
+9, 172, 254), rgb(0, 242, 254)); font-family: Arial, sans-serif; color: whi=
+te; text-align: center; position: relative; }
+
+h1 { font-size: 2.5rem; margin-bottom: 20px; text-shadow: rgba(0, 0, 0, 0.3=
+) 2px 2px 8px; }
+
+#mainTitle { font-size: 3rem; margin-bottom: 20px; text-shadow: rgba(0, 0, =
+0, 0.4) 3px 3px 10px; }
+
+#eventTitle { font-size: 4.6rem; margin-bottom: 20px; text-shadow: rgba(0, =
+0, 0, 0.4) 3px 3px 10px; background: rgba(0, 0, 0, 0.5); width: 100vw; padd=
+ing: 10px 0px; box-sizing: border-box; }
+
+#countdown { font-size: 13.8rem; font-weight: bold; text-shadow: rgba(0, 0,=
+ 0, 0.4) 4px 4px 12px; margin-bottom: 30px; }
+
+#countdown .days { font-size: 20rem; font-weight: bold; text-shadow: rgba(0=
+, 0, 0, 0.4) 4px 4px 12px; display: inline-block; animation: 1s ease 0s inf=
+inite normal none running pulse; }
+
+#countdown .text { font-size: 8rem; }
+
+@keyframes pulse {=20
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+#inputForm { display: flex; flex-direction: column; align-items: center; ma=
+rgin-bottom: 20px; }
+
+input { padding: 10px; margin: 10px 0px; font-size: 1rem; border: none; bor=
+der-radius: 5px; width: 300px; }
+
+button { padding: 10px 20px; font-size: 1.2rem; border: none; border-radius=
+: 5px; background-color: rgb(255, 117, 140); color: white; cursor: pointer;=
+ transition: background-color 0.3s; margin: 5px; }
+
+button:hover { background-color: rgb(255, 94, 98); }
+
+#eventList { display: flex; flex-wrap: wrap; justify-content: center; margi=
+n: 20px; }
+
+.eventCard { width: 200px; height: 140px; display: flex; flex-direction: co=
+lumn; justify-content: center; align-items: center; margin: 10px; border-ra=
+dius: 15px; background-color: rgb(245, 245, 245); box-shadow: rgba(0, 0, 0,=
+ 0.2) 0px 4px 8px; transition: transform 0.3s, box-shadow 0.3s; font-size: =
+1.2rem; font-weight: bold; color: rgb(51, 51, 51); position: relative; curs=
+or: pointer; user-select: none; }
+
+.eventCard:hover { transform: translateY(-10px); box-shadow: rgba(0, 0, 0, =
+0.3) 0px 8px 16px; }
+
+.countdownText { font-size: 1rem; margin-top: 5px; color: rgb(255, 94, 98);=
+ }
+
+#countdownSection { display: none; flex-direction: column; align-items: cen=
+ter; justify-content: center; height: 100vh; }
+
+#backButton { display: none; position: absolute; bottom: 20px; right: 20px;=
+ padding: 10px 20px; font-size: 1rem; border: none; border-radius: 5px; bac=
+kground-color: rgb(0, 123, 255); color: white; cursor: pointer; transition:=
+ background-color 0.3s; }
+
+#backButton:hover { background-color: rgb(0, 86, 179); }
+
+#buttonContainer { position: absolute; bottom: 20px; left: 20px; }
+
+#resetButton, #exportButton, #importButton { display: inline-block; }
+
+#footer { position: absolute; bottom: 10px; right: 10px; font-size: 1rem; }
+
+#footer a { color: white; text-decoration: none; font-weight: bold; }
+------MultipartBoundary--YIH4MVK9yCcq0k0iWqc6X9WQZkjbtEqlnKkNcbWW0r------
